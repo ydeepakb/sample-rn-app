@@ -8,6 +8,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Link } from "expo-router";
 
 export default function HomeScreen() {
+  console.log("Rendering HomeScreen");
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -70,7 +71,7 @@ export default function HomeScreen() {
           {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+      <ThemedView style={[styles.stepContainer, { flex: 3 }]}>
         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
         <ThemedText>
           {`When you're ready, run `}
@@ -95,7 +96,13 @@ const styles = StyleSheet.create({
   },
   stepContainer: {
     gap: 8,
-    marginBottom: 8,
+    padding: 5,
+    marginBottom: 5,
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#ddd",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   reactLogo: {
     height: 178,
