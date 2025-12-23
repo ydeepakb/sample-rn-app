@@ -10,6 +10,7 @@ import {
 import RandomNumber from "../randomNumber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
+import AnimatedDivideExample from "../animatedDivideExample";
 
 const Orientation = () => {
   const randomNUmberCount = 6;
@@ -166,6 +167,7 @@ const Orientation = () => {
      
       <Text>{remainingSeconds}</Text>
       <Button title="Upload Image" onPress={() => loadImage()} />
+        <AnimatedDivideExample></AnimatedDivideExample>
     </View>
   );
 };
