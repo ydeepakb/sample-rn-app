@@ -5,6 +5,7 @@ import {
   Text,
   Button,
   ToastAndroid,
+  Animated
 } from "react-native";
 import RandomNumber from "../randomNumber";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -16,6 +17,9 @@ const Orientation = () => {
   const [remainingSeconds, setRemainingSeconds] = useState(60);
   const intervalRef = useRef<number | null>(null);
   const [isRunning, setIsRunning] = useState(true);
+  // Initialise the animated value to an opacity of 1 (fully visible)
+  const fadeAnim = useRef(new Animated.Value(0)).current
+
   //create a collection of random numbers between 10 and 20
   const generateCollection = () =>
     Array.from(
@@ -24,6 +28,15 @@ const Orientation = () => {
     );
 
   const [collection, setCollection] = useState(generateCollection);
+  
+  const fadeIn = () => {
+    // Starts the animation to fade back in
+    Animated.timing(fadeAnim, {
+      toValue: 1, // Animate to opacity 1
+      duration: 60000,
+      useNativeDriver: true,
+    }).start();
+  }
 
   const target = useMemo(() => {
     const randomNumberIndexcollection = [];
@@ -91,6 +104,14 @@ const Orientation = () => {
     return "not-selected";
   }, [state.selectedNumberIndexes, collection, target]);
 
+  useEffect(()=>{
+    Animated.timing(fadeAnim, {
+      toValue: 1, // Animate to opacity 1
+      duration: 6000,
+      useNativeDriver: true,
+    }).start()
+  })
+
   useEffect(() => {
     if (!isRunning) {
       return;
@@ -113,12 +134,12 @@ const Orientation = () => {
 
   const loadImage = () => {
     launchImageLibrary({ mediaType: "photo" }, (response) => {
-      console.log("response", response.assets[0].fileSize);
+      console.log("response", response?.assets[0].fileSize);
       if (response.didCancel) {
         ToastAndroid.show("User cancelled image picker", ToastAndroid.SHORT);
         return;
       }
-      ToastAndroid.show(response.assets[0].uri, ToastAndroid.SHORT);
+      ToastAndroid.show(response?.assets[0]?.uri, ToastAndroid.SHORT);
     });
   };
   return (
@@ -139,7 +160,10 @@ const Orientation = () => {
           ></RandomNumber>
         ))}
       </View>
-      <Button title="Play Again" onPress={() => resetGame()} />
+      <Animated.View style={[{ opacity: fadeAnim }]}>
+         <Button title="Play Again" onPress={() => resetGame()} />
+      </Animated.View>
+     
       <Text>{remainingSeconds}</Text>
       <Button title="Upload Image" onPress={() => loadImage()} />
     </View>
